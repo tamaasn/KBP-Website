@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+G<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -224,133 +224,30 @@
     function dragElement(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       if (document.getElementById(elmnt.id+"_header")) {
-        // if present, the header is where you move the DIV from:
         document.getElementById(elmnt.id+"_header").onmousedown = dragMouseDown;
       } else {
-        // otherwise, move the DIV from anywhere inside the DIV:
         elmnt.onmousedown = dragMouseDown;
       }
 
       function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
-        // get the mouse cursor position at startup:
         pos3 = e.clientX;
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
         document.onmousemove = elementDrag;
       }
 
       function elementDrag(e) {
         e = e || window.event;
         e.preventDefault();
-        // calculate the new cursor position:
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        // set the element's new position:
         elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
       }
 
       function closeDragElement() {
-        // stop moving when mouse button is released:
         document.onmouseup = null;
-        document.onmousemove = null;
-      }
-    }
-
-
-    function addTask() {
-
-
-      if (taskInput.value.trim() === '') {
-        alert('Mohon jangan dikosongi');
-        return;
-      }
-
-      // Add task to list
-      const li = document.createElement('li');
-      li.textContent = taskInput.value;
-
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Hapus';
-      deleteButton.className = 'delete';
-      deleteButton.onclick = function () {
-        taskList.removeChild(li);
-        var data = arr.indexOf(li.textContent);
-        arr.splice(data,1);
-        const str=JSON.stringify(arr);
-        localStorage.setItem("aktivitas",str);
-      };
-      arr.push(taskInput.value);
-      li.appendChild(deleteButton);
-      taskList.appendChild(li);
-      const str = JSON.stringify(arr);
-      localStorage.setItem("aktivitas",str);
-      taskInput.value = '';
-    }
-  </script>
-  <script>
-    let timerInterval;
-    let timeLeft = 0;
-    const timerDisplay = document.getElementById('timer');
-
-    function updateDisplay() {
-      var seconds = timeLeft % 60;
-      let minutes = Math.floor((timeLeft-seconds) / 60);
-      var hour = Math.floor(minutes/60);
-      if (minutes < 60){
-        hour=0
-      }
-      else if (minutes >= 60){
-        minutes -= (hour*60);
-      }
-      timerDisplay.textContent = `${hour.toString().padStart(2,'0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-
-    function startTimer() {
-    document.getElementById("status").innerHTML="Menghitung mundur...";
-      timeLeft = parseFloat(document.getElementById('timerInput').value) * 60;
-      timer_image.src=timer_start;
-      if (timerInterval) return; // Prevent multiple intervals
-
-      timerInterval = setInterval(() => {
-        if (timeLeft > 0) {
-          timeLeft--;
-          updateDisplay();
-        } else {
-          clearInterval(timerInterval);
-          timerInterval = null;
-            document.getElementById("status").innerHTML="Waktu selesai!";
-            document.getElementById("alarm").play();
-            document.getElementById("alarm").loop=true;
-          timer_image.src=timer_stop;
-          //alert('Waktu selesai!');
-        }
-      }, 1000);
-    }
-
-    function stopTimer() {
-        document.getElementById("status").innerHTML="Menunggu...";
-        timer_image.src=timer_waiting;
-        document.getElementById("alarm").pause();
-        document.getElementById("alarm").currentTime=0;
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
-
-    function resetTimer() {
-      stopTimer();
-      timeLeft = parseInt(document.getElementById("timerInput").value) * 60;
-      updateDisplay();
-    }
-
-    // Initialize display
-    updateDisplay();
-  </script>
-
-</body>
-</html>
